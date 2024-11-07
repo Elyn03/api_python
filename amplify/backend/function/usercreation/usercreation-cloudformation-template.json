@@ -27,10 +27,6 @@
     "storageusersStreamArn": {
       "Type": "String",
       "Default": "storageusersStreamArn"
-    },
-    "functionusercreationName": {
-      "Type": "String",
-      "Default": "functionusercreationName"
     }
   },
   "Conditions": {
@@ -63,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "tokenmanagement",
+            "usercreation",
             {
               "Fn::Join": [
                 "",
                 [
-                  "tokenmanagement",
+                  "usercreation",
                   "-",
                   {
                     "Ref": "env"
@@ -94,9 +90,6 @@
             },
             "STORAGE_USERS_STREAMARN": {
               "Ref": "storageusersStreamArn"
-            },
-            "FUNCTION_USERCREATION_NAME": {
-              "Ref": "functionusercreationName"
             }
           }
         },
@@ -118,12 +111,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "apipythonLambdaRoleb56b1d7c",
+            "apipythonLambdaRoleb427eef9",
             {
               "Fn::Join": [
                 "",
                 [
-                  "apipythonLambdaRoleb56b1d7c",
+                  "apipythonLambdaRoleb427eef9",
                   "-",
                   {
                     "Ref": "env"
@@ -209,39 +202,6 @@
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "lambda:Create*",
-                "lambda:Put*",
-                "lambda:Add*",
-                "lambda:Get*",
-                "lambda:List*",
-                "lambda:Invoke*",
-                "lambda:Update*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:lambda:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":function:",
-                      {
-                        "Ref": "functionusercreationName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
             {
               "Effect": "Allow",
               "Action": [

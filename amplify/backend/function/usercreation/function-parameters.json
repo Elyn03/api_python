@@ -1,13 +1,6 @@
 {
   "lambdaLayers": [],
   "permissions": {
-    "function": {
-      "usercreation": [
-        "create",
-        "read",
-        "update"
-      ]
-    },
     "storage": {
       "users": [
         "create",

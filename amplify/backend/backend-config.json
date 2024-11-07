@@ -29,6 +29,29 @@
       "dependsOn": [
         {
           "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "usercreation"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "users"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "usercreation": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
             "Name",
             "Arn",
             "StreamArn"
@@ -71,6 +94,22 @@
         {
           "category": "function",
           "resourceName": "tokenmanagement"
+        }
+      ]
+    },
+    "AMPLIFY_function_usercreation_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "usercreation"
+        }
+      ]
+    },
+    "AMPLIFY_function_usercreation_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "usercreation"
         }
       ]
     },

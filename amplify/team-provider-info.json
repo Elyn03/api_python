@@ -15,11 +15,15 @@
       "function": {
         "usermanagement": {
           "deploymentBucketName": "amplify-apipython-dev-cdc94-deployment",
-          "s3Key": "amplify-builds/usermanagement-43484a6f3836684b6346-build.zip"
+          "s3Key": "amplify-builds/usermanagement-4f4b36445458744d4f66-build.zip"
         },
         "tokenmanagement": {
           "deploymentBucketName": "amplify-apipython-dev-cdc94-deployment",
-          "s3Key": "amplify-builds/tokenmanagement-5465444370326c4a5772-build.zip"
+          "s3Key": "amplify-builds/tokenmanagement-475233627375466d6677-build.zip"
+        },
+        "usercreation": {
+          "deploymentBucketName": "amplify-apipython-dev-cdc94-deployment",
+          "s3Key": "amplify-builds/usercreation-35576e6b736d35744457-build.zip"
         }
       },
       "api": {

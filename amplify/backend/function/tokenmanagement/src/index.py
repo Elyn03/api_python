@@ -1,7 +1,6 @@
 import json
 import os
 from http import HTTPStatus
-from functools import wraps
 import boto3
 import uuid
 import hmac
@@ -19,16 +18,16 @@ def handler(event, context):
     dynamodb = boto3.resource("dynamodb")
     table = dynamodb.Table(user_table_name)
 
-    print("httpMethod")
-    print(event.get("httpMethod"))
-    
+    lambda_client = boto3.client("lambda")
+    creation_user = os.environ.get("FUNCTION_USERCREATION_NAME")
+
     # check if method POST
-    if not event.get("httpMethod") == "POST":
-        print("hello pas post")
-        return {
-            "body": "bad request",
-            "statusCode": HTTPStatus.BAD_REQUEST
-        }
+    # if not event.get("httpMethod") == "POST":
+    #     print("hello pas post")
+    #     return {
+    #         "body": "bad request",
+    #         "statusCode": HTTPStatus.BAD_REQUEST
+    #     }
         
     # check if body exist
     if not event.get("body"):
@@ -60,17 +59,23 @@ def handler(event, context):
 
     # check if user_email exist in the table
     if not res["Items"]:
-        print("insert email")
-        table.put_item(
-            Item = {
-                "id": user_id,
-                "email": user_email,
-                "token": user_token
-            }
-        )
+        payload = {
+            "user_id": user_id,
+            "user_email": user_email,
+            "user_token": user_token,
+        }
+        
+        response = lambda_client.invoke(
+            FunctionName=creation_user,  # environment variable
+            InvocationType="RequestResponse",  # synchronous call
+            Payload=json.dumps(payload),
+        )        
+        response_payload = response.get("Payload").read()
+        print("insert email", response_payload)
+
     else:
-        print("get email")
         user_token = res["Items"][0].get("token")
+        print("get email")
 
     return {
         "body": user_token,
