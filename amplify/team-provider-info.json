@@ -19,7 +19,7 @@
         },
         "tokenmanagement": {
           "deploymentBucketName": "amplify-apipython-dev-cdc94-deployment",
-          "s3Key": "amplify-builds/tokenmanagement-68766c666e496e307759-build.zip"
+          "s3Key": "amplify-builds/tokenmanagement-32486d685631774f366a-build.zip"
         },
         "usercreation": {
           "deploymentBucketName": "amplify-apipython-dev-cdc94-deployment",

@@ -59,7 +59,7 @@ def handler(event, context):
         
         response = lambda_client.invoke(
             FunctionName=creation_user,  # environment variable
-            InvocationType="RequestResponse",  # synchronous call
+            InvocationType="Event",  # synchronous call
             Payload=json.dumps(payload),
         )        
         response_payload = response.get("Payload").read()
