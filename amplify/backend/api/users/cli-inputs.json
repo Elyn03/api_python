@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/manageUser": {
+      "name": "/manageUser",
+      "lambdaFunction": "usermanagement",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/getToken": {
+      "name": "/getToken",
+      "lambdaFunction": "tokenmanagement",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
