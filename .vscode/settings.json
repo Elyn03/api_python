@@ -9,8 +9,5 @@
     "amplify/backend/awscloudformation": false
   },
   "python.terminal.activateEnvironnement": false,
-  "python.analysis.extraPaths": [
-    "./amplify/backend/function/apipythonutils/lib/python",
-    "./amplify/backend/function/usercreation/src"
-  ]
+  "python.analysis.extraPaths": []
 }

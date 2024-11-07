@@ -15,24 +15,20 @@ def exception_handler(func):
         response = {}
         try:
             if not event["httpMethod"] == "GET":
-                raise PermissionError("bad request")
+                raise CustomException("http_error")
 
-            if not event.get("headers"):
-                raise PermissionError("x-api-key not provided")
+            if not event["headers"].get("x-api-key"):
+                raise CustomException("headers_error")
+
             res = func(event, context)
-
+        
             if res:
                 response["body"] = json.dumps(res)        
             response["statusCode"] = HTTPStatus.OK
 
-        except HTTPError as error:
-            response["statusCode"] = error.response.status_code
-        except PermissionError as error:
-            response["body"] = str(error)
-            response["statusCode"] = HTTPStatus.FORBIDDEN
-        except Exception as error:
-            response["body"] = str(error)
-            response["statusCode"] = HTTPStatus.INTERNAL_SERVER_ERROR
+        except CustomException as error:
+            response = error.get_message_error()
+            
         return response
 
     return wrapper
@@ -58,7 +54,30 @@ def handler(event, context):
 
     data = res["Items"]
 
-    if not data:
-        raise ValueError("User missing")
-    
+    try :
+        if not data:
+            raise CustomException("user_error")
+    except CustomException as error:
+        return error.get_message_error()
+        
     return data[0].get("email")
+
+class CustomException(Exception):
+    def __init__(self, title):
+        self.title = title
+
+    def get_message_error(self):
+        response = {}
+
+        if self.title == "http_error":
+            response["body"] = "bad request"
+            response["statusCode"] = HTTPStatus.BAD_REQUEST
+        
+        if self.title == "headers_error":
+            response["body"] = "x-api-key not provided"
+            response["statusCode"] = HTTPStatus.FORBIDDEN
+        
+        if self.title == "user_error":
+            response = "missing user"
+
+        return response

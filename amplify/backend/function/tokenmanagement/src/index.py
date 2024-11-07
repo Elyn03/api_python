@@ -11,8 +11,6 @@ from boto3.dynamodb.conditions import Key
 
 def handler(event, context):
 
-    print(event)
-
     os.environ['AWS_DEFAULT_REGION'] = 'eu-west-1'
     user_table_name = os.environ.get("STORAGE_USERS_NAME")
     dynamodb = boto3.resource("dynamodb")
@@ -21,30 +19,24 @@ def handler(event, context):
     lambda_client = boto3.client("lambda")
     creation_user = os.environ.get("FUNCTION_USERCREATION_NAME")
 
-    # check if method POST
-    # if not event.get("httpMethod") == "POST":
-    #     print("hello pas post")
-    #     return {
-    #         "body": "bad request",
-    #         "statusCode": HTTPStatus.BAD_REQUEST
-    #     }
+    user_email = None
+    try:
+        # check if method POST
+        if not event.get("httpMethod") == "POST":
+            raise CustomException("http_error")
         
-    # check if body exist
-    if not event.get("body"):
-        return {
-            "body": "email required",
-            "statusCode": HTTPStatus.BAD_REQUEST
-        }
+        # check if body exist
+        if not event.get("body"):
+            raise CustomException("body_error")
+        
+        user_email = json.loads(event["body"]).get("email")
 
-    user_email = json.loads(event["body"]).get("email")
-    # user_email = event["body"].get("email")
-
-    # check if email exist
-    if not user_email:
-        return {
-            "body": "email not provided",
-            "statusCode": HTTPStatus.BAD_REQUEST
-        }
+        # check if email exist
+        if not user_email:
+            raise CustomException("email_error")
+    
+    except CustomException as error:
+        return error.get_message_error()
 
     # get user_email in the table
     res = table.query(
@@ -81,3 +73,24 @@ def handler(event, context):
         "body": user_token,
         "statusCode": HTTPStatus.OK
     }
+
+class CustomException(Exception):
+    def __init__(self, title):
+        self.title = title
+
+    def get_message_error(self):
+        response = {}
+
+        if self.title == "http_error":
+            response["body"] = "bad request"
+            response["statusCode"] = HTTPStatus.BAD_REQUEST
+        
+        if self.title == "body_error":
+            response["body"] = "email required"
+            response["statusCode"] = HTTPStatus.BAD_REQUEST
+        
+        if self.title == "email_error":
+            response["body"] = "email not provided"
+            response["statusCode"] = HTTPStatus.BAD_REQUEST
+
+        return response
